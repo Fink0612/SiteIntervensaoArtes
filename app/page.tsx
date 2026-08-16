@@ -1,0 +1,153 @@
+export default function Home() {
+  return (
+    <main>
+      <section className="hero" id="inicio">
+        <nav className="nav" aria-label="Navegação principal">
+          <a className="brand" href="#inicio" aria-label="Sempre observados — início">
+            <span className="record-dot" aria-hidden="true" />
+            SEMPRE OBSERVADOS
+          </a>
+          <a className="nav-link" href="#privacidade">ENTENDA</a>
+        </nav>
+
+        <div className="signal" aria-hidden="true">
+          SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;
+        </div>
+
+        <div className="hero-grid">
+          <div className="hero-copy">
+            <p className="eyebrow">UMA INTERVENÇÃO SOBRE PRIVACIDADE</p>
+            <h1>
+              VOCÊ PERCEBEU<br />
+              QUANDO FOI<br />
+              <span>OBSERVADO?</span>
+            </h1>
+            <p className="intro">
+              Antes de chegar até aqui, câmeras, telas e sistemas já registraram
+              partes do seu caminho. Mas quem vê esses dados — e o que faz com eles?
+            </p>
+            <a className="cta" href="#privacidade">
+              OLHE MAIS DE PERTO <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+
+          <div className="watch-zone" aria-label="Ilustração de um olho representando vigilância">
+            <div className="corner top-left">REC</div>
+            <div className="corner top-right">16.08.26</div>
+            <div className="eye">
+              <div className="iris">
+                <div className="pupil" />
+                <div className="glare" />
+              </div>
+            </div>
+            <p className="camera-id">CAM_04 &nbsp; [ CORREDOR ]</p>
+          </div>
+        </div>
+
+        <p className="counter"><strong>#000127</strong> &nbsp; NÚMERO ILUSTRATIVO — NÃO RASTREAMOS VOCÊ</p>
+      </section>
+
+      <section className="statement" id="privacidade">
+        <p className="section-number">01 / PRIVACIDADE</p>
+        <h2>PRIVACIDADE NÃO É TER ALGO A ESCONDER.</h2>
+        <p className="statement-lead">
+          É ter o direito de escolher <em>o que</em> mostrar, <em>para quem</em>
+          e <em>por quanto tempo</em>.
+        </p>
+      </section>
+
+      <section className="traces" id="rastros">
+        <div className="section-heading">
+          <p className="section-number">02 / RASTROS</p>
+          <h2>VOCÊ DEIXA DADOS<br />POR ONDE PASSA.</h2>
+          <p>
+            Um dado isolado parece pequeno. Quando vários são conectados,
+            eles podem revelar hábitos, relações, interesses e até prever decisões.
+          </p>
+        </div>
+
+        <div className="trace-grid">
+          <article className="trace-card">
+            <span className="trace-index">01</span>
+            <div className="trace-icon location-icon" aria-hidden="true"><i /></div>
+            <h3>LOCALIZAÇÃO</h3>
+            <p>Onde você esteve, por quanto tempo e com que frequência voltou.</p>
+          </article>
+          <article className="trace-card red-card">
+            <span className="trace-index">02</span>
+            <div className="trace-icon search-icon" aria-hidden="true"><i /></div>
+            <h3>PESQUISAS</h3>
+            <p>Dúvidas, desejos e medos digitados em uma barra de busca.</p>
+          </article>
+          <article className="trace-card acid-card">
+            <span className="trace-index">03</span>
+            <div className="trace-icon face-icon" aria-hidden="true"><i /></div>
+            <h3>IMAGEM E VOZ</h3>
+            <p>Seu rosto, sua fala e outras características que identificam você.</p>
+          </article>
+          <article className="trace-card">
+            <span className="trace-index">04</span>
+            <div className="trace-icon clock-icon" aria-hidden="true"><i /></div>
+            <h3>TEMPO E ATENÇÃO</h3>
+            <p>Onde você clicou, o que assistiu e em qual conteúdo demorou mais.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="experiment" id="experimento">
+        <div className="experiment-label">
+          <span className="record-dot" aria-hidden="true" /> EXPERIÊNCIA 01
+        </div>
+        <div className="experiment-copy">
+          <p className="section-number">PARE POR CINCO SEGUNDOS</p>
+          <h2>O OLHAR MUDA<br />QUANDO VOCÊ SABE<br />QUE ESTÁ SENDO VISTO?</h2>
+          <p>
+            A vigilância não precisa proibir nada para nos controlar. Às vezes,
+            basta a possibilidade de alguém estar olhando para mudar nosso comportamento.
+          </p>
+        </div>
+        <div className="lens" aria-hidden="true">
+          <div className="lens-ring"><div className="lens-core" /></div>
+          <span>GRAVANDO?</span>
+        </div>
+      </section>
+
+      <section className="choice">
+        <p className="section-number">03 / RETOME O CONTROLE</p>
+        <div className="choice-grid">
+          <h2>PEQUENAS<br />ESCOLHAS.<br /><span>MENOS RASTROS.</span></h2>
+          <div className="actions">
+            <details>
+              <summary><b>01</b> REVISE AS PERMISSÕES <span>+</span></summary>
+              <p>Desative câmera, microfone e localização nos aplicativos que não precisam deles para funcionar.</p>
+            </details>
+            <details>
+              <summary><b>02</b> PENSE ANTES DE PUBLICAR <span>+</span></summary>
+              <p>Uma informação compartilhada pode ser copiada, arquivada e vista fora do contexto original.</p>
+            </details>
+            <details>
+              <summary><b>03</b> PROTEJA SUAS CONTAS <span>+</span></summary>
+              <p>Use senhas diferentes e ative a verificação em duas etapas sempre que estiver disponível.</p>
+            </details>
+            <details>
+              <summary><b>04</b> QUESTIONE O “ACEITAR TUDO” <span>+</span></summary>
+              <p>Leia as opções e recuse o que não for necessário. Conveniência não deve significar consentimento automático.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section className="final-message">
+        <p className="section-number">FIM DA PÁGINA. NÃO DO ASSUNTO.</p>
+        <h2>SE VOCÊ NÃO SABE<br />QUEM ESTÁ OLHANDO,<br /><span>OLHE DE VOLTA.</span></h2>
+        <a href="#inicio">VOLTAR AO INÍCIO ↑</a>
+      </section>
+
+      <footer>
+        <p>SEMPRE OBSERVADOS</p>
+        <p>INTERVENÇÃO ARTÍSTICA SOBRE PRIVACIDADE — 2026</p>
+        <p>ESTE SITE NÃO USA COOKIES NEM COLETA DADOS PESSOAIS.</p>
+      </footer>
+    </main>
+  );
+}
