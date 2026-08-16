@@ -21,7 +21,7 @@ a { color: inherit; }
 .hero-grid { width: min(1440px, 92vw); margin: 0 auto; min-height: calc(100svh - 140px); display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 5vw; padding: 6vh 0 10vh; }
 .eyebrow, .section-number, .camera-id, .counter { font-family: "Courier New", monospace; font-weight: 700; letter-spacing: .12em; }
 .eyebrow { color: var(--acid); font-size: .8rem; margin: 0 0 1.3rem; }
-h1 { margin: 0; font-size: clamp(3.6rem, 7.6vw, 8.3rem); line-height: .83; letter-spacing: -.035em; font-weight: 900; }
+h1 { margin: 0; font-size: clamp(3.6rem, 7.6vw, 8.3rem); line-height: .9; letter-spacing: -.025em; font-weight: 900; }
 h1 span { color: var(--alert); -webkit-text-stroke: 1px var(--alert); }
 .intro { max-width: 570px; margin: 2rem 0 2.2rem; font-family: Arial, Helvetica, sans-serif; font-size: clamp(1rem, 1.35vw, 1.2rem); line-height: 1.55; color: rgba(240,238,231,.78); }
 .cta { display: inline-flex; align-items: center; gap: 32px; padding: 15px 18px; background: var(--acid); color: var(--ink); text-decoration: none; letter-spacing: .06em; box-shadow: 8px 8px 0 var(--alert); transition: transform .18s ease, box-shadow .18s ease; }
@@ -108,7 +108,7 @@ footer p:last-child { text-align: right; }
   .hero-grid { grid-template-columns: 1fr; padding-top: 8vh; }
   .watch-zone { width: min(100%,560px); justify-self: center; }
   .counter { position: static; width: 92vw; margin: -2rem auto 1.4rem; text-align: right; }
-  h1 { font-size: clamp(3.4rem,15.4vw,6.2rem); }
+  h1 { font-size: clamp(2.9rem,13.5vw,5.5rem); line-height: .96; letter-spacing: -.02em; }
   .section-heading { grid-template-columns: 1fr; }
   .section-heading > p:last-child { max-width: 620px; }
   .trace-grid { grid-template-columns: repeat(2,1fr); }
