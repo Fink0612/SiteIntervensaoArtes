@@ -137,19 +137,19 @@ def criar_qr_tematico(destino: Path):
     draw = ImageDraw.Draw(imagem)
 
     # Cabeçalho de câmera/vigilância.
-    draw.ellipse((145, 109, 193, 157), fill=ALERT)
-    draw.text((220, 80), "REC", fill=ALERT, font=fonte(90))
-    draw.text((tamanho - 150, 94), "CAM_04  [ CORREDOR ]", fill=PAPER, font=fonte(54), anchor="ra")
-    draw.line((145, 210, tamanho - 145, 210), fill="#56534e", width=5)
+    draw.ellipse((215, 108, 257, 150), fill=ALERT)
+    draw.text((282, 82), "REC", fill=ALERT, font=fonte(78))
+    draw.text((tamanho - 300, 96), "CAM_04  [ CORREDOR ]", fill=PAPER, font=fonte(50), anchor="ra")
+    draw.line((215, 210, tamanho - 215, 210), fill="#56534e", width=5)
 
     painel, versao = criar_painel_qr()
     posicao = ((tamanho - painel.width) // 2, 275)
     imagem.paste(painel, posicao)
 
     # Mira e moldura de gravação fora da área de leitura.
-    canto = 120
-    comprimento = 185
-    largura = 18
+    canto = 100
+    comprimento = 100
+    largura = 15
     for sx, sy in ((1, 1), (-1, 1), (1, -1), (-1, -1)):
         x = canto if sx == 1 else tamanho - canto
         y = canto if sy == 1 else tamanho - canto
