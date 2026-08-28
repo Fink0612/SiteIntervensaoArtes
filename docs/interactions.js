@@ -44,6 +44,17 @@
     }, 2400);
   };
 
+  const scheduleBlink = () => {
+    const nextBlink = 2600 + Math.random() * 4200;
+    window.setTimeout(() => {
+      if (!watchZone.classList.contains('is-asleep') && !watchZone.classList.contains('is-interfering')) {
+        watchZone.classList.add('is-blinking');
+        window.setTimeout(() => watchZone.classList.remove('is-blinking'), 460);
+      }
+      scheduleBlink();
+    }, nextBlink);
+  };
+
   // 1. No computador, a íris acompanha a posição do cursor.
   window.addEventListener('pointermove', (event) => {
     if (!trackingUnlocked || gyroscopeOn || event.pointerType === 'touch') return;
@@ -53,15 +64,6 @@
     setGaze(x, y);
     resetIdle();
   }, { passive: true });
-
-  window.addEventListener('blur', () => {
-    watchZone.classList.add('is-asleep');
-    status.textContent = 'SINAL PERDIDO';
-  });
-  window.addEventListener('focus', () => {
-    watchZone.classList.remove('is-asleep');
-    status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : (trackingUnlocked ? 'RASTREAMENTO: CURSOR' : 'SINAL EM ESPERA');
-  });
 
   const interfere = () => {
     watchZone.classList.remove('is-interfering');
@@ -141,7 +143,8 @@
     setGaze(x * 0.72, y * 0.52);
   }, { passive: true });
 
-  // 4. Ao sair do site e voltar, o olho fecha como se tivesse sido pego observando.
+  // 4. Pisca espontaneamente para tornar a vigilância mais presente.
   // 5. Após alguns segundos sem cursor, ele procura sozinho pelo visitante.
   resetIdle();
+  scheduleBlink();
 })();

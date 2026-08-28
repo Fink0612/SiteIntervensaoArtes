@@ -31,7 +31,8 @@ h1 span { color: var(--alert); -webkit-text-stroke: 1px var(--alert); }
 .corner { position: absolute; top: 16px; font-family: "Courier New", monospace; font-size: .72rem; letter-spacing: .12em; z-index: 2; }
 .top-left { left: 18px; color: var(--alert); }
 .top-right { right: 18px; }
-.eye { width: 78%; aspect-ratio: 1.85; border: 8px solid var(--paper); border-radius: 70% 10%; transform: translate(var(--eye-x), var(--eye-y)) rotate(calc(45deg + var(--eye-turn))); display: grid; place-items: center; background: var(--paper); box-shadow: 0 0 50px rgba(240,238,231,.13); z-index: 1; cursor: crosshair; transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease; }
+.eye { width: 78%; aspect-ratio: 1.85; border: 8px solid var(--paper); border-radius: 70% 10%; transform: translate(var(--eye-x), var(--eye-y)) rotate(calc(45deg + var(--eye-turn))); display: grid; place-items: center; position: relative; overflow: hidden; background: var(--paper); box-shadow: 0 0 50px rgba(240,238,231,.13); z-index: 1; cursor: crosshair; transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease; }
+.eye::after { content: ""; position: absolute; inset: 0; z-index: 4; background: var(--ink); transform: scaleY(0); transform-origin: center; pointer-events: none; }
 .eye:focus-visible { outline: 3px solid var(--acid); outline-offset: 9px; }
 .iris { width: 48%; aspect-ratio: 1; border-radius: 50%; background: var(--alert); border: 13px solid var(--ink); display: grid; place-items: center; position: relative; transform: translate(var(--iris-x), var(--iris-y)); transition: transform .1s linear; }
 .pupil { width: 48%; aspect-ratio: 1; border-radius: 50%; background: var(--ink); }
@@ -50,8 +51,10 @@ h1 span { color: var(--alert); -webkit-text-stroke: 1px var(--alert); }
 .watch-zone.is-asleep .eye { transform: rotate(45deg) scaleY(.08); }
 .watch-zone.is-asleep .iris { opacity: 0; }
 .watch-zone.is-interfering { filter: contrast(1.4) saturate(1.7); background: repeating-linear-gradient(0deg, rgba(255,255,255,.2) 0 2px, transparent 2px 7px), var(--alert); }
-.watch-zone.is-interfering .eye { animation: blink-eye .85s steps(2); }
+.watch-zone.is-interfering .eye { animation: startled-eye .85s cubic-bezier(.2,.8,.2,1); }
 .watch-zone.is-interfering .iris { transform: translate(0,0) scale(.4); }
+.watch-zone.is-blinking .eye::after { animation: natural-blink .46s cubic-bezier(.35,0,.2,1); }
+.watch-zone.is-interfering .eye::after { animation: startled-blink .85s cubic-bezier(.35,0,.2,1); }
 .interference { position: fixed; inset: 0; z-index: 20; opacity: 0; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0 4px, rgba(255,255,255,.12) 5px 6px), linear-gradient(90deg, rgba(255,0,0,.12), transparent 42%, rgba(0,230,255,.12)); }
 body.has-interference .interference { opacity: 1; animation: interference-flash .18s steps(2) 5; }
 .signal-glitch { animation: signal-glitch .25s steps(2) 3; }
@@ -121,7 +124,9 @@ footer p:last-child { text-align: right; }
 @keyframes blink { 0%,55% { opacity: 1; } 56%,100% { opacity: .2; } }
 @keyframes seek { 0%,100% { transform: translate(0,0); } 30% { transform: translate(-13%,8%); } 67% { transform: translate(12%,-8%); } }
 @keyframes roaming-eye { 0%,100% { transform: translate(-3px,1px) rotate(42deg); } 30% { transform: translate(-9px,5px) rotate(37deg); } 67% { transform: translate(8px,-5px) rotate(52deg); } }
-@keyframes blink-eye { 0%,35%,100% { transform: rotate(45deg) scaleY(1); } 48%,68% { transform: rotate(45deg) scaleY(.025); } }
+@keyframes natural-blink { 0%,100% { transform: scaleY(0); } 38%,60% { transform: scaleY(1); } }
+@keyframes startled-blink { 0%,100% { transform: scaleY(0); } 25% { transform: scaleY(.08); } 43%,58% { transform: scaleY(1); } 74% { transform: scaleY(0); } 86% { transform: scaleY(.55); } 94% { transform: scaleY(0); } }
+@keyframes startled-eye { 0%,100% { transform: translate(var(--eye-x), var(--eye-y)) rotate(calc(45deg + var(--eye-turn))); } 28% { transform: translate(var(--eye-x), calc(var(--eye-y) - 5px)) rotate(calc(45deg + var(--eye-turn))) scale(1.045); } }
 @keyframes signal-glitch { 0% { transform: translateX(0); } 25% { transform: translateX(-12px); } 50% { transform: translateX(8px); } 100% { transform: translateX(0); } }
 @keyframes interference-flash { 50% { opacity: .68; } }
 @keyframes waiting-eye { 50% { transform: rotate(45deg) scale(.93); box-shadow: 0 0 70px rgba(255,59,48,.6); } }
