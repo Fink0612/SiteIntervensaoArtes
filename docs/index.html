@@ -27,9 +27,11 @@
             <p class="intro">Antes de chegar até aqui, câmeras, telas e sistemas já registraram partes do seu caminho. Mas quem vê esses dados — e o que faz com eles?</p>
             <a class="cta" href="#privacidade">OLHE MAIS DE PERTO <span aria-hidden="true">↓</span></a>
           </div>
-          <div class="watch-zone" aria-label="Ilustração de um olho representando vigilância">
+          <div class="watch-zone" aria-label="Ilustração interativa de um olho representando vigilância">
             <div class="corner top-left">REC</div><div class="corner top-right">16.08.26</div>
-            <div class="eye"><div class="iris"><div class="pupil"></div><div class="glare"></div></div></div>
+            <div class="tracking-status" aria-live="polite">RASTREAMENTO: CURSOR</div>
+            <button class="sensor-button" type="button" aria-pressed="false">VOCÊ ESTÁ SENDO VISTO — REAJA</button>
+            <div class="eye" role="button" tabindex="0" aria-label="Olho vigilante. Toque ou pressione Enter para causar uma interferência."><div class="iris"><div class="pupil"></div><div class="glare"></div></div></div>
             <p class="camera-id">CAM_04 &nbsp; [ CORREDOR ]</p>
           </div>
         </div>
@@ -86,5 +88,7 @@
       </section>
       <footer><p>SEMPRE OBSERVADOS</p><p>INTERVENÇÃO ARTÍSTICA SOBRE PRIVACIDADE — 2026</p><p>ESTE SITE NÃO USA COOKIES NEM COLETA DADOS PESSOAIS.</p></footer>
     </main>
+    <div class="interference" aria-hidden="true"></div>
+    <script src="interactions.js"></script>
   </body>
 </html>
