@@ -10,7 +10,7 @@
   if (!watchZone || !eye || !status || !sensorButton || reducedMotion) return;
 
   let gyroscopeOn = false;
-  let trackingUnlocked = false;
+  let trackingUnlocked = true;
   let activationStep = 0;
   let isIdle = false;
   let idleTimer;
@@ -120,6 +120,15 @@
 
   sensorButton.addEventListener('click', activateExperience);
   window.addEventListener('deviceorientation', (event) => {
+    // Android e alguns navegadores liberam o sensor automaticamente. O Safari/iOS
+    // exige o segundo clique no botão antes de chegar aqui com permissão.
+    if (!gyroscopeOn && trackingUnlocked && window.matchMedia('(pointer: coarse)').matches && typeof DeviceOrientationEvent.requestPermission !== 'function') {
+      gyroscopeOn = true;
+      watchZone.classList.add('is-gyro');
+      sensorButton.textContent = 'O OLHAR SEGUE VOCÊ';
+      sensorButton.setAttribute('aria-pressed', 'true');
+      status.textContent = 'RASTREAMENTO: MOVIMENTO';
+    }
     if (!gyroscopeOn) return;
     const angle = screen.orientation?.angle || window.orientation || 0;
     const sideways = Math.abs(angle) === 90;
