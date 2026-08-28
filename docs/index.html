@@ -17,7 +17,7 @@
       <section class="hero" id="inicio">
         <nav class="nav" aria-label="Navegação principal">
           <a class="brand" href="#inicio" aria-label="Sempre observados — início"><span class="record-dot" aria-hidden="true"></span>SEMPRE OBSERVADOS</a>
-          <a class="nav-link" href="#privacidade">ENTENDA</a>
+          <div class="nav-actions"><button class="sound-button" type="button" aria-pressed="false">SOM: DESLIGADO</button><a class="nav-link" href="#privacidade">ENTENDA</a></div>
         </nav>
         <div class="signal" aria-hidden="true">SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;SINAL ATIVO&nbsp;&nbsp;•&nbsp;&nbsp;</div>
         <div class="hero-grid">
@@ -32,6 +32,7 @@
             <div class="tracking-status" aria-live="polite">RASTREAMENTO: CURSOR</div>
             <button class="sensor-button" type="button" aria-pressed="false">VOCÊ ESTÁ SENDO VISTO — REAJA</button>
             <div class="activation-prompt" aria-live="polite"><span>PROTOCOLO DE OBSERVAÇÃO</span><strong>CLIQUE NOVAMENTE PARA CONFIRMAR</strong></div>
+            <div class="face-scan" aria-hidden="true"><span class="scan-corner one"></span><span class="scan-corner two"></span><span class="scan-corner three"></span><span class="scan-corner four"></span><p>ALVO: VISITANTE_127<br>IDADE: DESCONHECIDA<br>CONSENTIMENTO: AUSENTE</p></div>
             <div class="eye" role="button" tabindex="0" aria-label="Olho vigilante. Toque ou pressione Enter para causar uma interferência."><div class="iris"><div class="pupil"></div><div class="glare"></div></div></div>
             <p class="camera-id">CAM_04 &nbsp; [ CORREDOR ]</p>
           </div>
@@ -59,6 +60,21 @@
         </div>
       </section>
 
+      <section class="data-map" id="mapa">
+        <div><p class="section-number">02.5 / O PERFIL</p><h2>UM RASTRO SOZINHO<br>NÃO DIZ MUITO.</h2><p class="map-copy">Mas localização, horário, imagem e escolhas reunidos podem contar uma história inteira sobre você.</p></div>
+        <div class="network" aria-label="Mapa ilustrativo de dados conectados"><span class="node central">VOCÊ</span><span class="node place">LOCALIZAÇÃO</span><span class="node search">PESQUISAS</span><span class="node face">IMAGEM</span><span class="node time">TEMPO</span><i class="line l1"></i><i class="line l2"></i><i class="line l3"></i><i class="line l4"></i></div>
+      </section>
+
+      <section class="consent" id="escolhas">
+        <p class="section-number">EXPERIÊNCIA 02 / CONSENTIMENTO</p><h2>O QUE VOCÊ<br>ACEITARIA EM TROCA<br>DE CONVENIÊNCIA?</h2>
+        <div class="consent-options">
+          <button type="button" class="consent-option" data-choice="câmera" aria-pressed="false"><b>01</b><span>LIBERAR CÂMERA</span><small>para usar um filtro</small></button>
+          <button type="button" class="consent-option" data-choice="localização" aria-pressed="false"><b>02</b><span>LIBERAR LOCALIZAÇÃO</span><small>para receber uma oferta</small></button>
+          <button type="button" class="consent-option" data-choice="contatos" aria-pressed="false"><b>03</b><span>LIBERAR CONTATOS</span><small>para descobrir quem está aqui</small></button>
+        </div>
+        <p class="consent-result" aria-live="polite">NENHUMA PERMISSÃO ACEITA. A ESCOLHA TAMBÉM É UMA RESPOSTA.</p>
+      </section>
+
       <section class="experiment" id="experimento">
         <div class="experiment-label"><span class="record-dot" aria-hidden="true"></span> EXPERIÊNCIA 01</div>
         <div class="experiment-copy">
@@ -67,6 +83,11 @@
           <p>A vigilância não precisa proibir nada para nos controlar. Às vezes, basta a possibilidade de alguém estar olhando para mudar nosso comportamento.</p>
         </div>
         <div class="lens" aria-hidden="true"><div class="lens-ring"><div class="lens-core"></div></div><span>GRAVANDO?</span></div>
+      </section>
+
+      <section class="mirror" id="espelho">
+        <div class="mirror-copy"><p class="section-number">EXPERIÊNCIA 03 / ESPELHO</p><h2>OLHE PARA<br>QUEM OLHA.</h2><p>Entre no campo de visão, se quiser. A imagem fica somente no seu dispositivo e nunca é gravada ou enviada.</p><button class="mirror-button" type="button">ENTRAR NO CAMPO DE VISÃO</button></div>
+        <div class="mirror-frame"><video class="mirror-video" autoplay muted playsinline></video><div class="mirror-ui"><span>CAM_FRONTAL</span><span>REC? NÃO.</span><b>IMAGEM LOCAL · SEM GRAVAÇÃO</b></div></div>
       </section>
 
       <section class="choice">
@@ -85,7 +106,7 @@
       <section class="final-message">
         <p class="section-number">FIM DA PÁGINA. NÃO DO ASSUNTO.</p>
         <h2>SE VOCÊ NÃO SABE<br>QUEM ESTÁ OLHANDO,<br><span>OLHE DE VOLTA.</span></h2>
-        <a href="#inicio">VOLTAR AO INÍCIO ↑</a>
+        <div class="final-actions"><button class="share-button" type="button">GERAR “EU OLHEI DE VOLTA”</button><a href="#inicio">VOLTAR AO INÍCIO ↑</a></div>
       </section>
       <footer><p>SEMPRE OBSERVADOS</p><p>INTERVENÇÃO ARTÍSTICA SOBRE PRIVACIDADE — 2026</p><p>ESTE SITE NÃO USA COOKIES NEM COLETA DADOS PESSOAIS.</p></footer>
     </main>

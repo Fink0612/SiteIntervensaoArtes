@@ -147,4 +147,126 @@
   // 5. Após alguns segundos sem cursor, ele procura sozinho pelo visitante.
   resetIdle();
   scheduleBlink();
+
+  // Contador artístico: reage ao percurso, sem registrar informação real.
+  const counter = document.querySelector('.counter strong');
+  const updateCounter = () => {
+    if (!counter) return;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const signals = 127 + Math.floor((window.scrollY / maxScroll) * 873);
+    counter.textContent = `#${String(signals).padStart(6, '0')}`;
+  };
+  window.addEventListener('scroll', updateCounter, { passive: true });
+  updateCounter();
+
+  const toast = document.createElement('div');
+  toast.className = 'data-toast';
+  toast.setAttribute('aria-live', 'polite');
+  document.body.append(toast);
+  let toastTimer;
+  const announce = (message) => {
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 2300);
+  };
+
+  // Frases escondidas nos rastros: a coleta é fictícia, a provocação não.
+  document.querySelectorAll('.trace-card').forEach((card, index) => {
+    const messages = ['LOCALIZAÇÃO CRUZADA COM ROTINA.', 'DESEJOS TRANSFORMADOS EM PERFIL.', 'ROSTO NÃO É SENHA. É DADO.', 'ATENÇÃO TAMBÉM DEIXA RASTRO.'];
+    card.addEventListener('click', () => announce(messages[index]));
+  });
+
+  // Paisagem sonora opcional, gerada no próprio navegador.
+  const soundButton = document.querySelector('.sound-button');
+  let audioContext;
+  let soundTimer;
+  const surveillanceBeep = () => {
+    if (!audioContext || audioContext.state !== 'running') return;
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    oscillator.type = 'square';
+    oscillator.frequency.value = 820 + Math.random() * 380;
+    gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.025, audioContext.currentTime + .012);
+    gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + .09);
+    oscillator.connect(gain).connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + .1);
+  };
+  soundButton?.addEventListener('click', async () => {
+    if (!audioContext) {
+      const AudioConstructor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioConstructor) {
+        announce('SOM NÃO DISPONÍVEL NESTE NAVEGADOR.');
+        return;
+      }
+      audioContext = new AudioConstructor();
+    }
+    const enabled = soundButton.getAttribute('aria-pressed') !== 'true';
+    if (enabled) {
+      await audioContext.resume();
+      soundButton.setAttribute('aria-pressed', 'true');
+      soundButton.textContent = 'SOM: SINAL ATIVO';
+      surveillanceBeep();
+      soundTimer = window.setInterval(surveillanceBeep, 4800);
+    } else {
+      clearInterval(soundTimer);
+      await audioContext.suspend();
+      soundButton.setAttribute('aria-pressed', 'false');
+      soundButton.textContent = 'SOM: DESLIGADO';
+    }
+  });
+
+  // Simulador de consentimento: cada escolha é reversível e acontece localmente.
+  const options = [...document.querySelectorAll('.consent-option')];
+  const consentResult = document.querySelector('.consent-result');
+  options.forEach((option) => option.addEventListener('click', () => {
+    const accepted = option.getAttribute('aria-pressed') !== 'true';
+    option.setAttribute('aria-pressed', String(accepted));
+    const selected = options.filter((item) => item.getAttribute('aria-pressed') === 'true').map((item) => item.dataset.choice);
+    consentResult.textContent = selected.length
+      ? `${selected.length} PERMISS${selected.length === 1 ? 'ÃO' : 'ÕES'} SIMULADA${selected.length === 1 ? '' : 'S'}: ${selected.join(', ').toUpperCase()}.`
+      : 'NENHUMA PERMISSÃO ACEITA. A ESCOLHA TAMBÉM É UMA RESPOSTA.';
+  }));
+
+  // Espelho: a stream nunca sai do dispositivo e é encerrada ao fechar.
+  const mirrorButton = document.querySelector('.mirror-button');
+  const mirrorVideo = document.querySelector('.mirror-video');
+  let mirrorStream;
+  mirrorButton?.addEventListener('click', async () => {
+    if (mirrorStream) {
+      mirrorStream.getTracks().forEach((track) => track.stop());
+      mirrorStream = null;
+      mirrorVideo.srcObject = null;
+      mirrorVideo.classList.remove('is-on');
+      mirrorButton.textContent = 'ENTRAR NO CAMPO DE VISÃO';
+      return;
+    }
+    try {
+      mirrorStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      mirrorVideo.srcObject = mirrorStream;
+      mirrorVideo.classList.add('is-on');
+      mirrorButton.textContent = 'SAIR DO CAMPO DE VISÃO';
+    } catch {
+      announce('CÂMERA NÃO LIBERADA. NADA FOI GRAVADO.');
+    }
+  });
+
+  // Cartaz final para salvar: gerado em canvas, sem upload ou coleta.
+  document.querySelector('.share-button')?.addEventListener('click', () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200; canvas.height = 630;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#101010'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#ff3b30'; ctx.lineWidth = 18; ctx.beginPath(); ctx.arc(1015, 310, 155, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = '#d7ff35'; ctx.font = '700 36px monospace'; ctx.fillText('SEMPRE OBSERVADOS', 74, 95);
+    ctx.fillStyle = '#f0eee7'; ctx.font = '900 130px Impact, sans-serif'; ctx.fillText('EU OLHEI', 74, 280); ctx.fillText('DE VOLTA.', 74, 410);
+    ctx.fillStyle = '#ff3b30'; ctx.font = '700 27px monospace'; ctx.fillText('INTERVENÇÃO ARTÍSTICA SOBRE PRIVACIDADE', 76, 520);
+    const link = document.createElement('a');
+    link.download = 'eu-olhei-de-volta.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    announce('CARTAZ GERADO NO SEU DISPOSITIVO.');
+  });
 })();
