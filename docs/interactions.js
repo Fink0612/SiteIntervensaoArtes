@@ -23,6 +23,10 @@
     lastY = Math.max(-limit, Math.min(limit, y));
     watchZone.style.setProperty('--iris-x', `${lastX}px`);
     watchZone.style.setProperty('--iris-y', `${lastY}px`);
+    // O globo inteiro acompanha o gesto; a íris faz apenas o ajuste mais preciso.
+    watchZone.style.setProperty('--eye-x', `${(lastX * 0.34).toFixed(1)}px`);
+    watchZone.style.setProperty('--eye-y', `${(lastY * 0.34).toFixed(1)}px`);
+    watchZone.style.setProperty('--eye-turn', `${(lastX * 0.22).toFixed(2)}deg`);
   };
 
   const resetIdle = () => {
