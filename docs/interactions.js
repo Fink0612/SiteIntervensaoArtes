@@ -221,6 +221,14 @@
   // Simulador de consentimento: cada escolha é reversível e acontece localmente.
   const options = [...document.querySelectorAll('.consent-option')];
   const consentResult = document.querySelector('.consent-result');
+  const feedback = document.querySelector('.consent-feedback');
+  const feedbackTitle = feedback?.querySelector('h3');
+  const feedbackCopy = feedback?.querySelector('.feedback-copy');
+  const feedbacks = {
+    'câmera': ['câmera', 'ROSTO ENCONTRADO. IDENTIDADE NÃO.', 'Uma imagem pode ser usada para comparar, classificar e seguir você. Nesta simulação, nenhum rosto foi lido.'],
+    'localização': ['location', 'ROTA PROJETADA: VOCÊ ESTEVE AQUI.', 'Um ponto no mapa vira rotina quando se repete. Esta rota é inventada — seu local não foi consultado.'],
+    'contatos': ['contacts', 'REDE MONTADA: VOCÊ NÃO ESTÁ SÓ.', 'Uma lista de contatos também revela grupos, proximidades e ausências. Nenhum contato foi acessado.']
+  };
   options.forEach((option) => option.addEventListener('click', () => {
     const accepted = option.getAttribute('aria-pressed') !== 'true';
     option.setAttribute('aria-pressed', String(accepted));
@@ -228,6 +236,20 @@
     consentResult.textContent = selected.length
       ? `${selected.length} PERMISS${selected.length === 1 ? 'ÃO' : 'ÕES'} SIMULADA${selected.length === 1 ? '' : 'S'}: ${selected.join(', ').toUpperCase()}.`
       : 'NENHUMA PERMISSÃO ACEITA. A ESCOLHA TAMBÉM É UMA RESPOSTA.';
+    const chosen = accepted ? option.dataset.choice : selected.at(-1);
+    const content = chosen && feedbacks[chosen];
+    if (content && feedback && feedbackTitle && feedbackCopy) {
+      feedback.dataset.mode = content[0];
+      feedbackTitle.textContent = content[1];
+      feedbackCopy.textContent = content[2];
+      feedback.classList.remove('is-updating');
+      void feedback.offsetWidth;
+      feedback.classList.add('is-updating');
+    } else if (feedback && feedbackTitle && feedbackCopy) {
+      feedback.dataset.mode = 'none';
+      feedbackTitle.textContent = 'AINDA NÃO HÁ PERFIL PARA MONTAR.';
+      feedbackCopy.textContent = 'Escolha um cartão para ver como uma permissão aparentemente pequena pode mudar a leitura de uma pessoa.';
+    }
   }));
 
   // Espelho: a stream nunca sai do dispositivo e é encerrada ao fechar.
