@@ -177,6 +177,25 @@
     card.addEventListener('click', () => announce(messages[index]));
   });
 
+  // O mapa revela a consequência de cada dado sem consultar nenhum dado do visitante.
+  const network = document.querySelector('.network');
+  const mapInsight = document.querySelector('.map-insight');
+  const traceTexts = {
+    'você': ['O PERFIL COMEÇA AQUI.', 'Você não é um dado. Mas dados conectados podem tentar reduzir você a um perfil.'],
+    'localização': ['LOCALIZAÇÃO VIRA ROTINA.', 'Um ponto isolado é só um ponto. Muitos pontos podem revelar casa, trabalho e caminhos frequentes.'],
+    'pesquisas': ['PESQUISAS VIRAM INTENÇÃO.', 'Uma dúvida digitada pode ser lida como interesse, necessidade ou previsão de compra.'],
+    'imagem': ['IMAGEM VIRA IDENTIFICADOR.', 'Um rosto pode ser comparado entre lugares e horários, mesmo sem que você diga seu nome.'],
+    'tempo': ['TEMPO VIRA MEDIDA DE ATENÇÃO.', 'Segundos, pausas e retornos podem revelar o que consegue prender seu olhar.']
+  };
+  document.querySelectorAll('.node').forEach((node) => node.addEventListener('click', () => {
+    document.querySelectorAll('.node').forEach((item) => item.classList.remove('is-selected'));
+    node.classList.add('is-selected');
+    const trace = node.dataset.trace;
+    const text = traceTexts[trace];
+    network.dataset.active = trace;
+    if (mapInsight && text) mapInsight.innerHTML = `<b>${text[0]}</b><span>${text[1]}</span>`;
+  }));
+
   // Paisagem sonora opcional, gerada no próprio navegador.
   const soundButton = document.querySelector('.sound-button');
   let audioContext;
