@@ -188,8 +188,9 @@
     'tempo': ['TEMPO VIRA MEDIDA DE ATENÇÃO.', 'Segundos, pausas e retornos podem revelar o que consegue prender seu olhar.']
   };
   document.querySelectorAll('.node').forEach((node) => node.addEventListener('click', () => {
-    document.querySelectorAll('.node').forEach((item) => item.classList.remove('is-selected'));
+    document.querySelectorAll('.node').forEach((item) => { item.classList.remove('is-selected'); item.setAttribute('aria-pressed', 'false'); });
     node.classList.add('is-selected');
+    node.setAttribute('aria-pressed', 'true');
     const trace = node.dataset.trace;
     const text = traceTexts[trace];
     network.dataset.active = trace;
