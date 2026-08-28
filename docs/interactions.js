@@ -3,12 +3,15 @@
   const eye = document.querySelector('.eye');
   const status = document.querySelector('.tracking-status');
   const sensorButton = document.querySelector('.sensor-button');
+  const prompt = document.querySelector('.activation-prompt');
   const signal = document.querySelector('.signal');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!watchZone || !eye || !status || !sensorButton || reducedMotion) return;
 
   let gyroscopeOn = false;
+  let trackingUnlocked = false;
+  let activationStep = 0;
   let isIdle = false;
   let idleTimer;
   let lastX = 0;
@@ -23,7 +26,7 @@
   };
 
   const resetIdle = () => {
-    if (gyroscopeOn) return;
+    if (gyroscopeOn || !trackingUnlocked) return;
     clearTimeout(idleTimer);
     if (isIdle) {
       isIdle = false;
@@ -39,7 +42,7 @@
 
   // 1. No computador, a íris acompanha a posição do cursor.
   window.addEventListener('pointermove', (event) => {
-    if (gyroscopeOn || event.pointerType === 'touch') return;
+    if (!trackingUnlocked || gyroscopeOn || event.pointerType === 'touch') return;
     const rect = watchZone.getBoundingClientRect();
     const x = ((event.clientX - (rect.left + rect.width / 2)) / rect.width) * 38;
     const y = ((event.clientY - (rect.top + rect.height / 2)) / rect.height) * 38;
@@ -53,7 +56,7 @@
   });
   window.addEventListener('focus', () => {
     watchZone.classList.remove('is-asleep');
-    status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : 'RASTREAMENTO: CURSOR';
+    status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : (trackingUnlocked ? 'RASTREAMENTO: CURSOR' : 'SINAL EM ESPERA');
   });
 
   const interfere = () => {
@@ -68,7 +71,7 @@
       watchZone.classList.remove('is-interfering');
       document.body.classList.remove('has-interference');
       signal.classList.remove('signal-glitch');
-      status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : 'RASTREAMENTO: CURSOR';
+      status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : (trackingUnlocked ? 'RASTREAMENTO: CURSOR' : 'SINAL EM ESPERA');
     }, 900);
   };
 
@@ -81,30 +84,41 @@
     }
   });
 
-  // 3. No celular, o botão habilita o giroscópio (inclusive no Safari/iOS).
-  const startGyroscope = async () => {
+  // 3. A experiência só libera o olhar depois de uma segunda confirmação.
+  const activateExperience = async () => {
+    if (activationStep === 0) {
+      activationStep = 1;
+      watchZone.classList.add('is-arming');
+      prompt.textContent = 'VOCÊ TEM CERTEZA QUE QUER SER OBSERVADO?';
+      sensorButton.textContent = 'CLIQUE NOVAMENTE';
+      status.textContent = 'AGUARDANDO CONFIRMAÇÃO';
+      return;
+    }
+
     try {
-      if (typeof DeviceOrientationEvent === 'undefined') {
-        status.textContent = 'SENSOR INDISPONÍVEL';
-        return;
-      }
-      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const hasGyroscope = typeof DeviceOrientationEvent !== 'undefined';
+      if (hasGyroscope && typeof DeviceOrientationEvent.requestPermission === 'function') {
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission !== 'granted') throw new Error('permission denied');
       }
-      gyroscopeOn = true;
+      trackingUnlocked = true;
+      gyroscopeOn = hasGyroscope && window.matchMedia('(pointer: coarse)').matches;
       clearTimeout(idleTimer);
       watchZone.classList.remove('is-idle');
-      watchZone.classList.add('is-gyro');
+      watchZone.classList.remove('is-arming');
+      watchZone.classList.toggle('is-gyro', gyroscopeOn);
+      watchZone.classList.add('is-active');
       sensorButton.textContent = 'O OLHAR SEGUE VOCÊ';
       sensorButton.setAttribute('aria-pressed', 'true');
-      status.textContent = 'RASTREAMENTO: MOVIMENTO';
+      status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : 'RASTREAMENTO: CURSOR';
+      prompt.textContent = 'SINAL ESTABELECIDO';
+      window.setTimeout(() => watchZone.classList.remove('is-active'), 1100);
     } catch {
       status.textContent = 'PERMISSÃO NEGADA';
     }
   };
 
-  sensorButton.addEventListener('click', startGyroscope);
+  sensorButton.addEventListener('click', activateExperience);
   window.addEventListener('deviceorientation', (event) => {
     if (!gyroscopeOn) return;
     const angle = screen.orientation?.angle || window.orientation || 0;
