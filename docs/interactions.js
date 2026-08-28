@@ -327,10 +327,10 @@
     canvas.width = 1200; canvas.height = 630;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#101010'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.save(); ctx.beginPath(); ctx.arc(1015, 310, 145, 0, Math.PI * 2); ctx.clip();
-    ctx.save(); ctx.translate(2030, 0); ctx.scale(-1, 1); drawCover(ctx, posterVideo, 870, 165, 290, 290); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.arc(970, 310, 194, 0, Math.PI * 2); ctx.clip();
+    ctx.save(); ctx.translate(1940, 0); ctx.scale(-1, 1); drawCover(ctx, posterVideo, 776, 116, 388, 388); ctx.restore();
     ctx.restore();
-    ctx.strokeStyle = '#ff3b30'; ctx.lineWidth = 18; ctx.beginPath(); ctx.arc(1015, 310, 155, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = '#ff3b30'; ctx.lineWidth = 24; ctx.beginPath(); ctx.arc(970, 310, 210, 0, Math.PI * 2); ctx.stroke();
     ctx.fillStyle = '#d7ff35'; ctx.font = '700 36px monospace'; ctx.fillText('SEMPRE OBSERVADOS', 74, 95);
     ctx.fillStyle = '#f0eee7'; ctx.font = '900 130px Impact, sans-serif'; ctx.fillText('EU OLHEI', 74, 280); ctx.fillText('DE VOLTA.', 74, 410);
     ctx.fillStyle = '#ff3b30'; ctx.font = '700 27px monospace'; ctx.fillText('INTERVENÇÃO ARTÍSTICA SOBRE PRIVACIDADE', 76, 520);
@@ -340,7 +340,7 @@
     link.click();
     announce('RETRATO GERADO NO SEU DISPOSITIVO. NADA FOI ENVIADO.');
     } catch {
-      announce('CÂMERA NÃO LIBERADA. O RETRATO NÃO FOI GERADO.');
+      announce('MUITO BEM. VOCÊ PRESTOU ATENÇÃO.');
     } finally {
       posterStream?.getTracks().forEach((track) => track.stop());
       if (posterStream) posterVideo?.pause?.();
