@@ -5,9 +5,29 @@
   const sensorButton = document.querySelector('.sensor-button');
   const prompt = document.querySelector('.activation-prompt');
   const signal = document.querySelector('.signal');
+  const modal = document.querySelector('.interaction-modal');
+  const modalTitle = document.querySelector('#modal-title');
+  const modalCopy = document.querySelector('.modal-copy');
+  const modalClose = document.querySelector('.modal-close');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!watchZone || !eye || !status || !sensorButton || reducedMotion) return;
+
+  const showModal = (title, message) => {
+    if (!modal || !modalTitle || !modalCopy) return;
+    modalTitle.textContent = title;
+    modalCopy.textContent = message;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    modalClose?.focus();
+  };
+  const closeModal = () => {
+    modal?.classList.remove('is-open');
+    modal?.setAttribute('aria-hidden', 'true');
+  };
+  modalClose?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
+  window.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
 
   let gyroscopeOn = false;
   let trackingUnlocked = true;
@@ -72,6 +92,7 @@
     watchZone.classList.add('is-interfering');
     document.body.classList.add('has-interference');
     status.textContent = 'INTERFERÊNCIA DETECTADA';
+    showModal('INTERFERÊNCIA DETECTADA.', 'Você tocou no olhar. Talvez perceber que está sendo visto seja o primeiro gesto de controle.');
     signal.classList.add('signal-glitch');
     window.setTimeout(() => {
       watchZone.classList.remove('is-interfering');
@@ -98,6 +119,7 @@
       prompt.textContent = 'VOCÊ TEM CERTEZA QUE QUER SER OBSERVADO?';
       sensorButton.textContent = 'CLIQUE NOVAMENTE';
       status.textContent = 'AGUARDANDO CONFIRMAÇÃO';
+      showModal('VOCÊ TEM CERTEZA?', 'O olhar já estava aqui antes do seu clique. Agora você decidiu responder a ele.');
       return;
     }
 
@@ -118,6 +140,7 @@
       sensorButton.setAttribute('aria-pressed', 'true');
       status.textContent = gyroscopeOn ? 'RASTREAMENTO: MOVIMENTO' : 'RASTREAMENTO: CURSOR';
       prompt.textContent = 'SINAL ESTABELECIDO';
+      showModal('O OLHAR SEGUE VOCÊ.', 'Movimento, atenção e presença: a experiência reage, mas não registra nada.');
       window.setTimeout(() => watchZone.classList.remove('is-active'), 1100);
     } catch {
       status.textContent = 'PERMISSÃO NEGADA';
@@ -159,23 +182,20 @@
   window.addEventListener('scroll', updateCounter, { passive: true });
   updateCounter();
 
-  const toast = document.createElement('div');
-  toast.className = 'data-toast';
-  toast.setAttribute('aria-live', 'polite');
-  document.body.append(toast);
-  let toastTimer;
-  const announce = (message) => {
-    toast.textContent = message;
-    toast.classList.add('is-visible');
-    clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 2300);
-  };
+  const announce = (message) => showModal('SINAL EM ANÁLISE.', message);
 
   // Frases escondidas nos rastros: a coleta é fictícia, a provocação não.
   document.querySelectorAll('.trace-card').forEach((card, index) => {
     const messages = ['LOCALIZAÇÃO CRUZADA COM ROTINA.', 'DESEJOS TRANSFORMADOS EM PERFIL.', 'ROSTO NÃO É SENHA. É DADO.', 'ATENÇÃO TAMBÉM DEIXA RASTRO.'];
     card.addEventListener('click', () => announce(messages[index]));
   });
+
+  document.querySelectorAll('.actions details').forEach((item, index) => item.addEventListener('toggle', () => {
+    if (!item.open) return;
+    const advice = item.querySelector('p')?.textContent;
+    const headings = ['REVISE AS PERMISSÕES.', 'PENSE ANTES DE PUBLICAR.', 'PROTEJA SUAS CONTAS.', 'QUESTIONE O “ACEITAR TUDO”.'];
+    if (advice) showModal(headings[index], advice);
+  }));
 
   // O mapa revela a consequência de cada dado sem consultar nenhum dado do visitante.
   const network = document.querySelector('.network');
@@ -195,6 +215,7 @@
     const text = traceTexts[trace];
     network.dataset.active = trace;
     if (mapInsight && text) mapInsight.innerHTML = `<b>${text[0]}</b><span>${text[1]}</span>`;
+    if (text) showModal(text[0], text[1]);
   }));
 
   // Paisagem sonora opcional, gerada no próprio navegador.
@@ -230,11 +251,13 @@
       soundButton.textContent = 'SOM: SINAL ATIVO';
       surveillanceBeep();
       soundTimer = window.setInterval(surveillanceBeep, 4800);
+      showModal('SOM: SINAL ATIVO.', 'Pequenos sinais sonoros ocupam o silêncio. Você pode desligá-los quando quiser.');
     } else {
       clearInterval(soundTimer);
       await audioContext.suspend();
       soundButton.setAttribute('aria-pressed', 'false');
       soundButton.textContent = 'SOM: DESLIGADO';
+      showModal('SOM: DESLIGADO.', 'Escolher o silêncio também é uma forma de retomar o controle.');
     }
   });
 
@@ -265,10 +288,12 @@
       feedback.classList.remove('is-updating');
       void feedback.offsetWidth;
       feedback.classList.add('is-updating');
+      showModal(content[1], content[2]);
     } else if (feedback && feedbackTitle && feedbackCopy) {
       feedback.dataset.mode = 'none';
       feedbackTitle.textContent = 'AINDA NÃO HÁ PERFIL PARA MONTAR.';
       feedbackCopy.textContent = 'Escolha um cartão para ver como uma permissão aparentemente pequena pode mudar a leitura de uma pessoa.';
+      showModal('VOCÊ RECUSOU.', 'Nenhuma permissão foi simulada. A escolha de não ceder também deixa uma mensagem.');
     }
   }));
 
@@ -283,6 +308,7 @@
       mirrorVideo.srcObject = null;
       mirrorVideo.classList.remove('is-on');
       mirrorButton.textContent = 'ENTRAR NO CAMPO DE VISÃO';
+      showModal('CAMPO DE VISÃO ENCERRADO.', 'A imagem desapareceu junto com o acesso à câmera. Nada foi gravado.');
       return;
     }
     try {
@@ -290,6 +316,7 @@
       mirrorVideo.srcObject = mirrorStream;
       mirrorVideo.classList.add('is-on');
       mirrorButton.textContent = 'SAIR DO CAMPO DE VISÃO';
+      showModal('VOCÊ ENTROU NO CAMPO DE VISÃO.', 'A imagem está só no seu dispositivo. Não há gravação, envio ou arquivo.');
     } catch {
       announce('CÂMERA NÃO LIBERADA. NADA FOI GRAVADO.');
     }
@@ -339,7 +366,7 @@
     link.download = 'eu-olhei-de-volta.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    announce('RETRATO GERADO NO SEU DISPOSITIVO. NADA FOI ENVIADO.');
+    showModal('RETRATO GERADO.', 'A imagem foi criada no seu dispositivo. Nada foi enviado para este site.');
     } catch {
       announce('MUITO BEM. VOCÊ PRESTOU ATENÇÃO.');
     } finally {
