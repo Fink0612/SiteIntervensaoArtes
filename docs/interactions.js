@@ -294,12 +294,42 @@
     }
   });
 
-  // Cartaz final para salvar: gerado em canvas, sem upload ou coleta.
-  document.querySelector('.share-button')?.addEventListener('click', () => {
+  // Cartaz final: pede a câmera frontal, captura uma imagem local e encerra o acesso em seguida.
+  const waitForVideo = (video) => new Promise((resolve) => {
+    if (video.readyState >= 2 && video.videoWidth) return resolve();
+    video.addEventListener('loadeddata', resolve, { once: true });
+  });
+  const drawCover = (ctx, video, x, y, width, height) => {
+    const scale = Math.max(width / video.videoWidth, height / video.videoHeight);
+    const sourceWidth = width / scale;
+    const sourceHeight = height / scale;
+    ctx.drawImage(video, (video.videoWidth - sourceWidth) / 2, (video.videoHeight - sourceHeight) / 2, sourceWidth, sourceHeight, x, y, width, height);
+  };
+  document.querySelector('.share-button')?.addEventListener('click', async () => {
+    let posterStream;
+    let posterVideo = mirrorVideo;
+    try {
+      if (!mirrorStream) {
+        if (!navigator.mediaDevices?.getUserMedia) throw new Error('camera unavailable');
+        posterStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        posterVideo = document.createElement('video');
+        posterVideo.autoplay = true;
+        posterVideo.muted = true;
+        posterVideo.playsInline = true;
+        posterVideo.srcObject = posterStream;
+        await posterVideo.play();
+        await waitForVideo(posterVideo);
+      } else {
+        await waitForVideo(posterVideo);
+      }
+
     const canvas = document.createElement('canvas');
     canvas.width = 1200; canvas.height = 630;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#101010'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.save(); ctx.beginPath(); ctx.arc(1015, 310, 145, 0, Math.PI * 2); ctx.clip();
+    ctx.save(); ctx.translate(2030, 0); ctx.scale(-1, 1); drawCover(ctx, posterVideo, 870, 165, 290, 290); ctx.restore();
+    ctx.restore();
     ctx.strokeStyle = '#ff3b30'; ctx.lineWidth = 18; ctx.beginPath(); ctx.arc(1015, 310, 155, 0, Math.PI * 2); ctx.stroke();
     ctx.fillStyle = '#d7ff35'; ctx.font = '700 36px monospace'; ctx.fillText('SEMPRE OBSERVADOS', 74, 95);
     ctx.fillStyle = '#f0eee7'; ctx.font = '900 130px Impact, sans-serif'; ctx.fillText('EU OLHEI', 74, 280); ctx.fillText('DE VOLTA.', 74, 410);
@@ -308,6 +338,12 @@
     link.download = 'eu-olhei-de-volta.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-    announce('CARTAZ GERADO NO SEU DISPOSITIVO.');
+    announce('RETRATO GERADO NO SEU DISPOSITIVO. NADA FOI ENVIADO.');
+    } catch {
+      announce('CÂMERA NÃO LIBERADA. O RETRATO NÃO FOI GERADO.');
+    } finally {
+      posterStream?.getTracks().forEach((track) => track.stop());
+      if (posterStream) posterVideo?.pause?.();
+    }
   });
 })();
