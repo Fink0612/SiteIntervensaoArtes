@@ -190,13 +190,6 @@
     card.addEventListener('click', () => announce(messages[index]));
   });
 
-  document.querySelectorAll('.actions details').forEach((item, index) => item.addEventListener('toggle', () => {
-    if (!item.open) return;
-    const advice = item.querySelector('p')?.textContent;
-    const headings = ['REVISE AS PERMISSÕES.', 'PENSE ANTES DE PUBLICAR.', 'PROTEJA SUAS CONTAS.', 'QUESTIONE O “ACEITAR TUDO”.'];
-    if (advice) showModal(headings[index], advice);
-  }));
-
   // O mapa revela a consequência de cada dado sem consultar nenhum dado do visitante.
   const network = document.querySelector('.network');
   const mapInsight = document.querySelector('.map-insight');
